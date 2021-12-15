@@ -9,6 +9,10 @@ const registerUser = async (req, res) => {
     return res.status(201).json(user);
 };
 
+// const makeDeposit = async (req, res) => {
+//     const 
+// };
+
 module.exports = {
     registerUser,
 };

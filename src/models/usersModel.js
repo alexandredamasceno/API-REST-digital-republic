@@ -10,9 +10,10 @@ const verifyIfUserAlreadyExist = async (fullName, cpf) =>
             return true;
         });
 
-const addUser = async (fullName, cpf) =>
+const addUser = async (fullName, cpf, account, agency) =>
     connection()
-        .then((db) => db.collection('users').insertOne({ fullName, cpf, saldo: 0 }))
+        .then((db) => db
+        .collection('users').insertOne({ fullName, cpf, account, agency, saldo: 0 }))
         .then((response) => ({ id: response.insertedId, fullName, cpf }));
 
 const makeDeposit = async (id, value) =>
