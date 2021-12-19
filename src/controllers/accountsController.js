@@ -1,4 +1,5 @@
-const { addNewAccount, makeNewDeposit, makeNewTransfer } = require('../services/accountsService');
+const { addNewAccount, makeNewDeposit,
+    makeNewTransfer, accountInfo } = require('../services/accountsService');
 
 const registerAccount = async (req, res) => {
     const { fullName, cpf } = req.body;
@@ -25,8 +26,16 @@ const makeTransfer = async (req, res) => {
     return res.status(200).json(transfer);
 };
 
+const getAccountInfo = async (req, res) => {
+    const { id } = req.user;
+    const account = await accountInfo(id);
+
+    return res.status(200).json(account);
+};
+
 module.exports = {
-    registerAccount,
     makeDeposit,
     makeTransfer,
+    getAccountInfo,
+    registerAccount,
 };

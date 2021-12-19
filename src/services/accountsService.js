@@ -55,7 +55,14 @@ const makeNewTransfer = async (account, agency, cpf, value) => {
     return { account, agency, value };
 };
 
+const accountInfo = async (id) => {
+    const account = await getAccountInfo(id);
+
+    return account;
+};
+
 module.exports = {
+    accountInfo,
     addNewAccount,
     makeNewDeposit,
     makeNewTransfer,
