@@ -12,10 +12,10 @@ const messageTokenInvalid = {
 };
 
 const createToken = (object) => {
-    const { id, fullName } = object;
+    const { id, cpf } = object;
     const payload = {
         id,
-        fullName,
+        cpf,
     };
 
     const jwtConfig = {
@@ -30,11 +30,13 @@ const createToken = (object) => {
 
 const validateToken = (req, res, next) => {
     const token = req.headers.authorization;
+    console.log(token);
 
     if (!token) return res.status(404).json(messageTokenNotFound);
 
     try {
         const result = jwt.verify(token, SECRET);
+        console.log(result);
 
         req.user = result;
 

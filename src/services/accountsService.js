@@ -45,7 +45,6 @@ const addNewAccount = async (fullName, cpf, password) => {
     const user = await addAccount(obj);
 
     const token = createToken(user);
-    // const { password, ...rest } = user;
     return { ...user, token };
 };
 
@@ -69,9 +68,9 @@ const makeNewTransfer = async (account, agency, cpf, value) => {
 };
 
 const accountInfo = async (id) => {
-    const { fullName, account, agency, amount } = await getAccountInfo(id);
+    const result = await getAccountInfo(id);
 
-    return { fullName, account, agency, amount };
+    return result;
 };
 
 const getLogin = async (cpf, password) => {

@@ -27,7 +27,12 @@ const addAccount = async (obj) =>
 
 const loginAccount = async (cpf, password) =>
     connection()
-        .then((db) => db.collection('accounts').findOne({ cpf, password }));
+        .then((db) => db.collection('accounts').findOne({ cpf, password }))
+        .then((response) => {
+            const { _id } = response;
+
+            return { id: _id, cpf };
+        });
 
 const makeDeposit = async (id, value) =>
         connection()

@@ -6,7 +6,7 @@ const { validateToken } = require('../token/index');
 const router = express.Router();
 
 router.route('/account')
-    .post(registerAccount)
-    .get(validateToken, getAccountInfo);
+    .get(validateToken, getAccountInfo)
+    .post(registerAccount);
 
 module.exports = router;
