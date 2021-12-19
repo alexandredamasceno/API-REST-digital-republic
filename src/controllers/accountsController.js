@@ -29,7 +29,6 @@ const makeTransfer = async (req, res) => {
 
 const getAccountInfo = async (req, res) => {
     const { id } = req.user;
-    console.log(id);
     const account = await accountInfo(id);
 
     return res.status(200).json(account);
