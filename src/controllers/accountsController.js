@@ -1,10 +1,11 @@
 const { addNewAccount, makeNewDeposit,
-    makeNewTransfer, accountInfo } = require('../services/accountsService');
+    makeNewTransfer, accountInfo,
+    getLogin } = require('../services/accountsService');
 
 const registerAccount = async (req, res) => {
-    const { fullName, cpf } = req.body;
+    const { fullName, cpf, password } = req.body;
 
-    const user = await addNewAccount(fullName, cpf);
+    const user = await addNewAccount(fullName, cpf, password);
 
     return res.status(201).json(user);
 };
@@ -33,9 +34,18 @@ const getAccountInfo = async (req, res) => {
     return res.status(200).json(account);
 };
 
+const loginAccount = async (req, res) => {
+    const { cpf, password } = req.body;
+
+    const account = await getLogin(cpf, password);
+
+    return res.status(200).json(account);
+};
+
 module.exports = {
     makeDeposit,
     makeTransfer,
+    loginAccount,
     getAccountInfo,
     registerAccount,
 };

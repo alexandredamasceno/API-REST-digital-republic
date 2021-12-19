@@ -3,12 +3,17 @@ const { addAccount,
     makeDeposit,
     getAccountInfo, 
     makeTransfer,
+    loginAccount,
 } = require('../models/accountsModel');
 const { createToken } = require('../token/index');
 const { createAccountAndAgency } = require('../helpers/createBankInfos');
 
 const messageUserAlreadyExist = {
     message: 'User already exist',
+};
+
+const messageUserDoesntExist = {
+    message: 'User doesnt exist',
 };
 
 const messageToNegativeValue = {
@@ -23,16 +28,24 @@ const messageInvalidTransfer = {
     message: 'Invali transfer. Please, check your data and try again!',
 };
 
-const addNewAccount = async (fullName, cpf) => {
+const addNewAccount = async (fullName, cpf, password) => {
     const { account, agency } = createAccountAndAgency();
 
     if (await verifyIfAccountAlreadyExist(fullName, cpf) === true) {
         return messageUserAlreadyExist;
     }
-    const user = await addAccount(fullName, cpf, account, agency);
+
+    const obj = {
+        fullName,
+        cpf,
+        password,
+        account,
+        agency,
+    };
+    const user = await addAccount(obj);
 
     const token = createToken(user);
-
+    // const { password, ...rest } = user;
     return { ...user, token };
 };
 
@@ -56,12 +69,22 @@ const makeNewTransfer = async (account, agency, cpf, value) => {
 };
 
 const accountInfo = async (id) => {
-    const account = await getAccountInfo(id);
+    const { fullName, account, agency, amount } = await getAccountInfo(id);
 
-    return account;
+    return { fullName, account, agency, amount };
+};
+
+const getLogin = async (cpf, password) => {
+    const account = await loginAccount(cpf, password);
+    if (!account) return messageUserDoesntExist;
+
+    const token = createToken(account);
+
+    return { token };
 };
 
 module.exports = {
+    getLogin,
     accountInfo,
     addNewAccount,
     makeNewDeposit,

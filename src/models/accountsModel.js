@@ -16,11 +16,18 @@ const getAccountInfo = async (id) =>
         connection()
             .then((db) => db.collection('accounts').findOne({ _id: ObjectId(id) }));
 
-const addAccount = async (fullName, cpf, account, agency) =>
+const addAccount = async (obj) =>
     connection()
         .then((db) => db
-        .collection('accounts').insertOne({ fullName, cpf, account, agency, amount: 0 }))
-        .then((response) => ({ id: response.insertedId, fullName, cpf, account, agency }));
+        .collection('accounts').insertOne({ ...obj, amount: 0 }))
+        .then((response) => {
+            const { password, ...rest } = obj;
+            return { id: response.insertedId, ...rest };
+        });
+
+const loginAccount = async (cpf, password) =>
+    connection()
+        .then((db) => db.collection('accounts').findOne({ cpf, password }));
 
 const makeDeposit = async (id, value) =>
         connection()
@@ -43,6 +50,7 @@ const makeTransfer = async (account, agency, cpf, value) =>
 module.exports = {
     addAccount,
     makeDeposit,
+    loginAccount,
     makeTransfer,
     getAccountInfo,
     verifyIfAccountAlreadyExist,
