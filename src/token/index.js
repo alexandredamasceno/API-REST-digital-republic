@@ -29,11 +29,11 @@ const createToken = (object) => {
 };
 
 const validateToken = (req, res, next) => {
+    const token = req.headers.authorization;
+
+    if (!token) return res.status(404).json(messageTokenNotFound);
+
     try {
-        const token = req.headers.authorization;
-
-        if (!token) return messageTokenNotFound;
-
         const result = jwt.verify(token, SECRET);
 
         req.user = result;

@@ -6,9 +6,13 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 
-const registerUserRoute = require('../routes/registerRoute');
+const registerAccount = require('../routes/registerRoute');
+const depositRoute = require('../routes/depositRouter');
+const transferRouter = require('../routes/transferRoute');
 
-app.use(registerUserRoute);
+app.use(registerAccount);
+app.use(depositRoute);
+app.use(transferRouter);
 
 const { PORT } = process.env;
 
