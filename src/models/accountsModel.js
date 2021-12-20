@@ -7,6 +7,12 @@ function redirect(response) {
     return true;
 }
 
+const decreasesAfterIncreases = async (id, value) =>
+    connection()
+        .then((db) => db
+            .collection('accounts').updateOne({ _id: ObjectId(id) }, { $inc: { amount: -value } }))
+        .then((res) => console.log(res));
+
 const verifyIfAccountAlreadyExist = async (fullName, cpf) =>
     connection()
         .then((db) => db.collection('accounts').findOne({ $or: [{ fullName }, { cpf }] }))
@@ -47,6 +53,7 @@ const makeTransfer = async (account, agency, cpf, value) =>
                 .collection('accounts')
                     .updateOne({ cpf }, { $inc: { amount: +value } }))
                         .then((response) => {
+                            console.log('matched', response.matchedCount);
                             if (!response.matchedCount) return null;
 
                             return { account, agency, value };
@@ -58,5 +65,6 @@ module.exports = {
     loginAccount,
     makeTransfer,
     getAccountInfo,
+    decreasesAfterIncreases,
     verifyIfAccountAlreadyExist,
 };

@@ -4,6 +4,7 @@ const { addAccount,
     getAccountInfo, 
     makeTransfer,
     loginAccount,
+    decreasesAfterIncreases,
 } = require('../models/accountsModel');
 const { createToken } = require('../token/index');
 const { createAccountAndAgency } = require('../helpers/createBankInfos');
@@ -58,11 +59,16 @@ const makeNewDeposit = async (id, value) => {
     return { account, agency, amount };
 };
 
-const makeNewTransfer = async (account, agency, cpf, value) => {
+const makeNewTransfer = async (obj) => {
+    const { id, account, agency, cpf, value } = obj;    
     if (value < 0 || typeof value === 'string') return messageToNegativeValue;
     const transfer = await makeTransfer(account, agency, cpf, value);
     
-    if (!transfer) return messageInvalidTransfer;
+    if (!transfer) {
+        return messageInvalidTransfer;
+    }
+
+    await decreasesAfterIncreases(id, value);
     
     return { account, agency, value };
 };

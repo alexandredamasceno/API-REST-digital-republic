@@ -21,8 +21,16 @@ const makeDeposit = async (req, res) => {
 
 const makeTransfer = async (req, res) => {
     const { account, agency, cpf, value } = req.body;
+    const { id } = req.user;
+    const obj = {
+        id,
+        account,
+        agency,
+        cpf,
+        value,
+    };
 
-    const transfer = await makeNewTransfer(account, agency, cpf, value);
+    const transfer = await makeNewTransfer(obj);
 
     return res.status(200).json(transfer);
 };
