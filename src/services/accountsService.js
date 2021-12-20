@@ -17,6 +17,10 @@ const messageUserDoesntExist = {
     message: 'User doesnt exist',
 };
 
+const messageFields = {
+    message: 'Please fill in all fields',
+};
+
 const messageToNegativeValue = {
     message: 'Invalid value',
 };
@@ -30,6 +34,7 @@ const messageInvalidTransfer = {
 };
 
 const addNewAccount = async (fullName, cpf, password) => {
+    if (!fullName || !cpf || !password) return messageFields;
     const { account, agency } = createAccountAndAgency();
 
     if (await verifyIfAccountAlreadyExist(fullName, cpf) === true) {
@@ -80,6 +85,7 @@ const accountInfo = async (id) => {
 };
 
 const getLogin = async (cpf, password) => {
+    if (!cpf || !password) return messageFields;
     const account = await loginAccount(cpf, password);
     if (!account) return messageUserDoesntExist;
 
